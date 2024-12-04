@@ -33,6 +33,23 @@ const qrcode = useQRCode(apiBase + "/espais/" + props.point.number);
         </div>
       </div>
     </RouterLink>
+    <div v-else>
+      <div class="details text-center">
+        <div class="d-flex">
+          <div class="number">{{ props.point.number }}</div>
+          <h3 class="ms-2 pt-1">{{ props.point.title }}</h3>
+        </div>
+        <img
+          v-if="props.point.title"
+          class="h-150"
+          :src="qrcode"
+          :alt="props.point.title"
+        />
+        <div v-else class="w-50">
+          <img class="h-150" src="@/assets/images/empty.svg" alt="" />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
