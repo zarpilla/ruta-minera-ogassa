@@ -3,7 +3,7 @@
 <template>
   <div class="py-2">
     <RouterLink to="/">
-      <h1 class="mb-0">RUTA MINERA D'OGASSA</h1>
+      <h1 class="mb-0">RUTA MINERA DE SURROCA</h1>
     </RouterLink>
   </div>
 </template>
