@@ -3,25 +3,33 @@ import MainTitle from '../components/MainTitle.vue';
 import points from '@/stores/espais';
 
 import { useRoute } from 'vue-router';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 
 const route = useRoute();
 const pointId = computed(() => route.params.id);
 const point = computed(() => points.find(p => p.number === pointId.value));
 const baseUrl = import.meta.env.VITE_URL_BASE;
-
+const selectedLanguage = ref(0);
 </script>
 <template>
   <div class="espai text-center">
-    <MainTitle v-if="point">{{ point.title}}</MainTitle>
+    <MainTitle v-if="point">{{ point.number}}. {{ point.title}}</MainTitle>
+    
     <div class="row mt-5">
-    <div class="col-12 col-md" v-for="audio in point?.audios">
-      
-      <h2 class="mb-3"> {{ audio.toUpperCase() }}</h2>
-      <audio controls class="mb-5">
-        <source :src="'/audios/' + point?.number + '-' + audio + '.aac'" type="audio/mpeg">
+    <div class="col-12 col-md" v-for="(language, ai) in point?.languages">
+      <a class="btn mb-4" :class="selectedLanguage === ai ? 'selected' : ''" @click="selectedLanguage = ai">
+        {{ language.toUpperCase() }}
+      </a>
+      <div class="text d-flex d-md-none mb-3" v-if="point && point.texts">
+        <p v-if="point" v-html="point.texts[ai]"></p>
+      </div>
+      <audio controls class="mb-5" v-if="point?.files">
+        <source :src="'/audios/' + point?.files[ai]" type="audio/mpeg">
         Your browser does not support the audio element.
       </audio>
+    </div>
+    <div class="text d-none d-md-flex" v-if="point && point.texts">
+      <p v-if="point" v-html="point.texts[selectedLanguage]"></p>
     </div>
   </div>
   </div>
@@ -31,5 +39,30 @@ const baseUrl = import.meta.env.VITE_URL_BASE;
 audio {
   border-radius: 25px;
 }
+.text {
+  font-size: 18px;
+}
+.btn {
+  border-radius: 25px;
+  background: var(--senpir-verd-fosc, #003842);
+  padding: 12px 30px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 17px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #fff;
+  text-decoration: none;
+}
+.btn.selected, .btn:hover {
+  background: var(--senpir-verd-clar, #49A986);
+  color: #fff;
+}
 
+.text h3 {
+  text-align: center;
+  font-size: 21px;
+  font-weight: 600;
+  line-height: 24px;
+}
 </style>
