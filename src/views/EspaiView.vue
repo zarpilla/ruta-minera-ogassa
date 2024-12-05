@@ -1,37 +1,45 @@
 <script setup lang="ts">
-import MainTitle from '../components/MainTitle.vue';
-import points from '@/stores/espais';
+import MainTitle from "../components/MainTitle.vue";
+import points from "@/stores/espais";
 
-import { useRoute } from 'vue-router';
-import { computed, ref } from 'vue';
+import { useRoute } from "vue-router";
+import { computed, ref } from "vue";
 
 const route = useRoute();
 const pointId = computed(() => route.params.id);
-const point = computed(() => points.find(p => p.number === pointId.value));
+const point = computed(() => points.find((p) => p.number === pointId.value));
 const baseUrl = import.meta.env.VITE_URL_BASE;
 const selectedLanguage = ref(0);
 </script>
 <template>
   <div class="espai text-center">
-    <MainTitle v-if="point">{{ point.number}}. {{ point.title}}</MainTitle>
-    
     <div class="row mt-5">
-    <div class="col-12 col-md" v-for="(language, ai) in point?.languages">
-      <a class="btn mb-4" :class="selectedLanguage === ai ? 'selected' : ''" @click="selectedLanguage = ai">
-        {{ language.toUpperCase() }}
-      </a>
-      <div class="text d-flex d-md-none mb-3" v-if="point && point.texts">
-        <p v-if="point" v-html="point.texts[ai]"></p>
+    <div class="col" v-for="(language, ai) in point?.languages">
+        <a
+          class="btn mb-4"
+          :class="selectedLanguage === ai ? 'selected' : ''"
+          @click="selectedLanguage = ai"
+        >
+          {{ language.toUpperCase() }}
+        </a>
       </div>
-      <audio controls class="mb-5" v-if="point?.files">
-        <source :src="'/audios/' + point?.files[ai]" type="audio/mpeg">
-        Your browser does not support the audio element.
-      </audio>
     </div>
-    <div class="text d-none d-md-flex" v-if="point && point.texts">
-      <p v-if="point" v-html="point.texts[selectedLanguage]"></p>
+
+    <MainTitle v-if="point">{{ point.number }}. {{ point.title }}</MainTitle>
+
+    <div class="row mt-5">      
+      <div class="text mt-3" v-if="point && point.texts">
+        <p v-if="point" v-html="point.texts[selectedLanguage]"></p>
+
+        <audio controls class="mt-3 mb-5" v-if="point?.files">
+          <source
+            :src="'/audios/' + point?.files[selectedLanguage]"
+            type="audio/mpeg"
+          />
+          Your browser does not support the audio element.
+        </audio>
+      </div>
     </div>
-  </div>
   </div>
 </template>
 
@@ -45,7 +53,7 @@ audio {
 .btn {
   border-radius: 25px;
   background: var(--senpir-verd-fosc, #003842);
-  padding: 12px 30px;
+  padding: 12px 20px;
   font-size: 16px;
   font-weight: 600;
   line-height: 17px;
@@ -54,8 +62,17 @@ audio {
   color: #fff;
   text-decoration: none;
 }
-.btn.selected, .btn:hover {
-  background: var(--senpir-verd-clar, #49A986);
+
+@media screen and (min-width: 768px) {
+  .btn {
+    padding: 12px 30px;
+  }
+  
+}
+
+.btn.selected,
+.btn:hover {
+  background: var(--senpir-verd-clar, #49a986);
   color: #fff;
 }
 
