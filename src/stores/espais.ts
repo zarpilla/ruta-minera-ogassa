@@ -1,4 +1,12 @@
-const points = [
+interface Point {
+  number: string;
+  title: string;
+  languages: string[];
+  files: string[];
+  texts: string[];
+}
+
+const points: Point[] = [
   {
     number: "01",
     title: "Can Jolis",
@@ -14,22 +22,37 @@ const points = [
   {
     number: "02",
     title: "",
+    languages: [],
+    files: [],
+    texts: [],
   },
   {
     number: "03",
     title: "",
+    languages: [],
+    files: [],
+    texts: [],
   },
   {
     number: "04",
     title: "",
+    languages: [],
+    files: [],
+    texts: [],
   },
   {
     number: "05",
     title: "",
+    languages: [],
+    files: [],
+    texts: [],
   },
   {
     number: "06",
     title: "",
+    languages: [],
+    files: [],
+    texts: [],
   },
 ];
 

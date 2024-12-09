@@ -10,6 +10,23 @@ const pointId = computed(() => route.params.id);
 const point = computed(() => points.find((p) => p.number === pointId.value));
 const baseUrl = import.meta.env.VITE_URL_BASE;
 const selectedLanguage = ref(0);
+const audio = ref("");
+
+if (point && point.value?.files && point.value?.files[selectedLanguage.value]) {
+  audio.value = `/audios/${point.value.files[selectedLanguage.value]}`;
+}
+
+const setLanguge = (language: number) => {
+  audio.value = "";
+  if (point && point.value) {
+    selectedLanguage.value = language;
+    setTimeout(() => {
+      if (point.value?.files && point.value?.files[selectedLanguage.value]) {
+        audio.value = `/audios/${point.value.files[selectedLanguage.value]}`;
+      }
+    }, 100);    
+  }
+};
 </script>
 <template>
   <div class="espai text-center">
@@ -18,7 +35,7 @@ const selectedLanguage = ref(0);
         <a
           class="btn mb-4"
           :class="selectedLanguage === ai ? 'selected' : ''"
-          @click="selectedLanguage = ai"
+          @click="setLanguge(ai)"
         >
           {{ language.toUpperCase() }}
         </a>
@@ -30,10 +47,9 @@ const selectedLanguage = ref(0);
     <div class="row mt-5">      
       <div class="text mt-3" v-if="point && point.texts">
         <p v-if="point" v-html="point.texts[selectedLanguage]"></p>
-
-        <audio controls class="mt-3 mb-5" v-if="point?.files">
+        <audio controls class="mt-3 mb-5" v-if="audio">
           <source
-            :src="'/audios/' + point?.files[selectedLanguage]"
+            :src="audio"
             type="audio/mpeg"
           />
           Your browser does not support the audio element.
